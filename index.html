@@ -3,24 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>
-AdityaProCoders | IT Company, Web Development & Cybersecurity Solutions
-</title>
-<meta name="google-site-verification" content="PIWUCt6XJBrwV0Cf-kDKjrvgXe-ia3nQhls1c6p_Lsc" />
-<meta property="og:image"
-content="https://adityaprocoders.github.io/pic/adityaprocoders.png">
-    
-    <meta name="description"
-content="AdityaProCoders is a modern IT company providing web development, app development, cybersecurity, UI/UX and cloud solutions.">
-
-<meta name="keywords"
-content="adityaprocoders, AdityaProCoders, Aditya Kumar Singh, web developer, programmer, AdityaProCoders IT company, web development company, app development company, cybersecurity company, software company India">
-<meta name="author" content="AdityaProCoders">
-  <meta name="robots"
-content="index, follow">
-    <link rel="icon" type="image/png" href="pic/adityaprocoders.png">
+  <title>AdityaProCoders | IT Company, Web Development & Cybersecurity Solutions</title>
+    <meta name="google-site-verification" content="PIWUCt6XJBrwV0Cf-kDKjrvgXe-ia3nQhls1c6p_Lsc" />
+    <meta property="og:image" content="https://adityaprocoders.github.io/pic/adityaprocoders.png">
+    <meta name="description" content="AdityaProCoders is an elite futuristic IT brand providing next-generation web applications, cyber solutions, cloud engineering, and custom AI systems.">
+    <meta name="keywords" content="adityaprocoders, AdityaProCoders, Aditya Kumar Singh, web developer, programmer, AdityaProCoders IT company, web development company, app development company, cybersecurity company, software company India">
+    <meta name="author" content="AdityaProCoders">
+    <meta name="robots" content="index, follow">
+    <link rel="icon" type="image/png" href="https://adityaprocoders.github.io/pic/adityaprocoders.png">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Space Grotesk & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <script type="application/ld+json">
 {
@@ -35,6 +34,41 @@ content="index, follow">
   ]
 }
 </script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        cyber: ['Space Grotesk', 'sans-serif']
+                    },
+                    colors: {
+                        cyberdark: {
+                            bg: '#050816',
+                            card: 'rgba(11, 16, 40, 0.6)',
+                            border: 'rgba(59, 130, 246, 0.2)',
+                            text: '#f3f4f6'
+                        },
+                        neon: {
+                            blue: '#00f0ff',
+                            purple: '#bd00ff',
+                            cyan: '#00ffd1',
+                            green: '#39ff14'
+                        }
+                    },
+                    boxShadow: {
+                        'neon-blue': '0 0 20px rgba(0, 240, 255, 0.4)',
+                        'neon-purple': '0 0 20px rgba(189, 0, 255, 0.4)',
+                        'neon-cyan': '0 0 20px rgba(0, 255, 209, 0.4)',
+                        'neon-green': '0 0 20px rgba(57, 255, 20, 0.4)',
+                        'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.37)'
+                    }
+                }
+            }
+        }
+    </script>
 
 </head>
 <body class="preload-active relative selection:bg-cyan-500 selection:text-black">
