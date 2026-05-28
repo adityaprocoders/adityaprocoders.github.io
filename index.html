@@ -36,288 +36,1198 @@ content="index, follow">
 }
 </script>
 
-
-
-
-
-
-
-
 </head>
-<body>
+<body class="preload-active relative selection:bg-cyan-500 selection:text-black">
 
-    <header class="navbar">
-    <a href="#home" class="logo-link">
-        <img src="pic/adityaprocoders.png" class="logo-img">
-        <span class="logo-name">
-            aditya<span style="color:#d2813f;">pro</span><span style="color:#4dc4e2;">coders</span>
-        </span>
-    </a>
+    <!-- Custom Interactive Glow Cursor -->
+    <div id="custom-cursor" class="hidden md:block fixed w-8 h-8 rounded-full border-2 border-neon-cyan opacity-0 z-50 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-transform duration-75 mix-blend-screen shadow-neon-cyan"></div>
+    <div id="custom-cursor-dot" class="hidden md:block fixed w-2 h-2 bg-neon-blue rounded-full opacity-0 z-50 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none mix-blend-screen"></div>
 
-    <div class="menu-toggle" id="menu-toggle">
-        <i class="fas fa-bars"></i>
+    <!-- Live Ambient Grid Particles Background -->
+    <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <div class="absolute inset-0 cyber-grid opacity-30"></div>
+        <div class="absolute top-1/4 left-1/3 w-[500px] h-[500px] bg-gradient-to-tr from-neon-blue to-transparent opacity-10 blur-[120px] rounded-full"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-gradient-to-tr from-neon-purple to-transparent opacity-10 blur-[150px] rounded-full"></div>
+        <canvas id="ambient-canvas" class="absolute inset-0 w-full h-full opacity-40"></canvas>
     </div>
 
-    <nav>
-        <ul class="nav-links" id="nav-links">
-            <li><a href="#home">Home</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#contact">Contact</a></li>
-            <li>
-                <button id="theme-btn">
-                    <i class="fas fa-moon"></i>
+    <!-- AI Booting Load Screen -->
+    <div id="loader-screen" class="fixed inset-0 z-[100] flex flex-col justify-center items-center bg-[#030611] transition-opacity duration-700 ease-out">
+        <div class="relative flex flex-col items-center">
+            <!-- Morphing Logo Sphere -->
+            <div class="w-24 h-24 rounded-full ai-orb flex items-center justify-center shadow-neon-blue relative mb-6">
+                <img src="https://adityaprocoders.github.io/pic/adityaprocoders.png" alt="Logo" class="w-16 h-16 object-contain relative z-10 animate-pulse rounded-full" onerror="this.src='https://placehold.co/100/050816/00f0ff?text=APC'">
+            </div>
+            
+            <h2 class="text-2xl font-cyber font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-neon-blue via-neon-cyan to-neon-purple uppercase">
+                AdityaProCoders
+            </h2>
+            <p class="text-xs font-mono tracking-[0.3em] text-neutral-400 mt-2 mb-8">BOOTING QUANTUM SYSTEMS...</p>
+            
+            <!-- Dynamic Terminal Console Output in loader -->
+            <div class="w-80 h-28 bg-[#090e21] rounded-lg border border-[#00f0ff]/20 p-3 font-mono text-[10px] text-neon-cyan overflow-hidden shadow-inner flex flex-col justify-end">
+                <div id="loader-terminal-feed" class="space-y-1"></div>
+            </div>
+            
+            <!-- Core system progress slider -->
+            <div class="w-64 bg-neutral-800 h-1.5 rounded-full overflow-hidden mt-6 relative border border-white/5">
+                <div id="loader-bar" class="bg-gradient-to-r from-neon-blue to-neon-purple h-full w-0 transition-all duration-300"></div>
+            </div>
+            <p id="loader-percent" class="font-mono text-xs text-neon-blue mt-2">0%</p>
+        </div>
+    </div>
+
+    <!-- Sticky Glassmorphism Header -->
+    <header class="fixed top-0 left-0 w-full z-40 glass-panel border-b border-white/5 transition-all duration-300 px-6 py-4 md:px-12 flex justify-between items-center">
+        <!-- Logo Link -->
+        <a href="#home" class="flex items-center gap-3 group">
+            <img src="https://adityaprocoders.github.io/pic/adityaprocoders.png" alt="APC Logo" class="w-10 h-10 object-contain rounded-full border border-neon-blue/30 group-hover:rotate-12 transition-transform duration-300" onerror="this.src='https://placehold.co/100/050816/00f0ff?text=APC'">
+            <span class="font-cyber font-bold text-xl tracking-wider text-white">
+                aditya<span class="text-[#d2813f] transition-all duration-300 group-hover:text-amber-500">pro</span><span class="text-[#4dc4e2]">coders</span>
+            </span>
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="hidden md:flex items-center gap-8 font-cyber font-medium text-sm">
+            <a href="#home" class="text-white/80 hover:text-neon-cyan hover:glow-text-cyan transition-all">Home</a>
+            <a href="#about" class="text-white/80 hover:text-neon-cyan hover:glow-text-cyan transition-all">About</a>
+            <a href="#services" class="text-white/80 hover:text-neon-cyan hover:glow-text-cyan transition-all">Services</a>
+            <a href="#ai-dashboard" class="text-white/80 hover:text-neon-cyan hover:glow-text-cyan transition-all">AI Space</a>
+            <a href="#projects" class="text-white/80 hover:text-neon-cyan hover:glow-text-cyan transition-all">Projects</a>
+            <a href="#tech-stack" class="text-white/80 hover:text-neon-cyan hover:glow-text-cyan transition-all">Tech Matrix</a>
+            <a href="#contact" class="text-white/80 hover:text-neon-cyan hover:glow-text-cyan transition-all">Contact</a>
+        </nav>
+
+        <!-- Right Side Controls (Theme & Trigger Buttons) -->
+        <div class="flex items-center gap-4">
+            <!-- Custom System Mode Control (Futuristic light/dark override widget) -->
+            <button id="theme-btn" class="p-2 w-10 h-10 rounded-full border border-neon-blue/20 flex items-center justify-center hover:bg-neon-blue/10 hover:border-neon-blue transition-all" title="Toggle Cyber Mode">
+                <i id="theme-icon" class="fas fa-satellite-dish text-neon-blue text-sm"></i>
+            </button>
+            <a href="#quote-calculator" class="hidden lg:flex items-center gap-2 bg-gradient-to-r from-neon-blue to-neon-purple px-4 py-2 rounded-full font-cyber text-xs font-bold uppercase tracking-wider text-white shadow-neon-blue hover:scale-105 transition-all">
+                <i class="fas fa-brain animate-pulse"></i> Instant Quote
+            </a>
+            
+            <!-- Mobile Toggle -->
+            <button id="menu-toggle" class="md:hidden p-2 text-white hover:text-neon-cyan transition-colors" aria-label="Toggle Navigation Menu">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Glass Overlay Nav Menu -->
+    <div id="mobile-menu" class="fixed inset-0 z-30 glass-panel-heavy hidden md:hidden flex-col justify-center items-center gap-8 font-cyber text-xl font-bold tracking-wider text-center transition-all duration-300">
+        <button id="mobile-close" class="absolute top-6 right-6 text-white hover:text-neon-purple p-2 text-2xl">
+            <i class="fas fa-times"></i>
+        </button>
+        <a href="#home" class="mobile-nav-link text-white/80 hover:text-neon-cyan hover:glow-text-cyan transition-all">Home</a>
+        <a href="#about" class="mobile-nav-link text-white/80 hover:text-neon-cyan hover:glow-text-cyan transition-all">About</a>
+        <a href="#services" class="mobile-nav-link text-white/80 hover:text-neon-cyan hover:glow-text-cyan transition-all">Services</a>
+        <a href="#ai-dashboard" class="mobile-nav-link text-white/80 hover:text-neon-cyan hover:glow-text-cyan transition-all">AI Space</a>
+        <a href="#projects" class="mobile-nav-link text-white/80 hover:text-neon-cyan hover:glow-text-cyan transition-all">Projects</a>
+        <a href="#tech-stack" class="mobile-nav-link text-white/80 hover:text-neon-cyan hover:glow-text-cyan transition-all">Tech Matrix</a>
+        <a href="#contact" class="mobile-nav-link text-white/80 hover:text-neon-cyan hover:glow-text-cyan transition-all">Contact</a>
+        
+        <a href="#quote-calculator" class="mobile-nav-link flex items-center gap-2 bg-gradient-to-r from-neon-blue to-neon-purple px-6 py-3 rounded-full font-cyber text-sm font-bold uppercase tracking-wider text-white shadow-neon-blue mt-4">
+            <i class="fas fa-calculator"></i> Quote Calculator
+        </a>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen relative flex items-center pt-24 pb-16 px-6 md:px-12 lg:px-24 z-10">
+        <div class="grid lg:grid-cols-12 gap-12 items-center w-full max-w-7xl mx-auto">
+            
+            <!-- Left Side Core Branding Copy -->
+            <div class="lg:col-span-7 flex flex-col items-start gap-6 text-left">
+                <span class="inline-flex items-center gap-2 bg-neon-blue/10 border border-neon-blue/30 px-4 py-1.5 rounded-full text-xs font-mono text-neon-blue font-semibold uppercase tracking-wider shadow-neon-blue/20">
+                    <span class="w-2.5 h-2.5 bg-neon-cyan rounded-full animate-ping"></span>
+                    ⚡ System Status: Fully Operational
+                </span>
+                
+                <h1 class="text-4xl md:text-6xl lg:text-7xl font-cyber font-extrabold tracking-tight leading-[1.1] text-white">
+                    AdityaProCoders <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan via-neon-blue to-neon-purple glow-text-cyan" id="typing-heading">
+                        Next-Gen Digital Solutions
+                    </span>
+                </h1>
+
+                <p class="text-neutral-300 text-lg md:text-xl leading-relaxed max-w-2xl">
+                    Deploying elite, AI-integrated software architectures. Specializing in responsive web app ecosystems, high-grade cybersecurity audits, cloud DevOps, and automated business frameworks designed for 2026.
+                </p>
+
+                <!-- Floating Terminal Command line preview -->
+                <div class="w-full glass-panel border border-neon-blue/20 rounded-xl p-4 font-mono text-sm text-neon-cyan shadow-lg mb-4 hidden sm:block relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-full bg-gradient-to-l from-neon-blue/10 to-transparent pointer-events-none"></div>
+                    <div class="flex items-center gap-2 border-b border-white/5 pb-2 mb-2 text-xs text-neutral-500">
+                        <span class="w-3 h-3 rounded-full bg-red-500/50"></span>
+                        <span class="w-3 h-3 rounded-full bg-yellow-500/50"></span>
+                        <span class="w-3 h-3 rounded-full bg-green-500/50"></span>
+                        <span class="ml-2 font-cyber tracking-widest text-neutral-400">AP_KERNEL_V4.2.sh</span>
+                    </div>
+                    <div class="space-y-1 text-xs md:text-sm">
+                        <p class="text-neutral-400"><span class="text-neon-purple">apc-core@system:~$</span> npx initiate-digital-transformation</p>
+                        <p class="text-neon-cyan">✓ Establishing secure WebSocket pipelines...</p>
+                        <p class="text-neon-blue">✓ AI Assistant Matrix Online. Ready to transform your enterprise.</p>
+                    </div>
+                </div>
+
+                <!-- Call To Action Actions -->
+                <div class="flex flex-wrap items-center gap-4 w-full sm:w-auto">
+                    <a href="#projects" class="w-full sm:w-auto text-center font-cyber font-bold tracking-wider text-xs uppercase bg-gradient-to-r from-neon-blue to-neon-cyan px-8 py-4 rounded-xl text-black hover:scale-105 transition-all shadow-neon-blue">
+                        <i class="fas fa-folder-open mr-2"></i> Explore Bento Grid
+                    </a>
+                    <a href="#contact" class="w-full sm:w-auto text-center font-cyber font-bold tracking-wider text-xs uppercase bg-white/5 hover:bg-neon-purple/20 border border-white/10 hover:border-neon-purple px-8 py-4 rounded-xl text-white hover:scale-105 transition-all shadow-glass">
+                        <i class="fas fa-comments mr-2"></i> Connect Matrix
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right Side Complex Interactive Console & Cyber Shield Illustration -->
+            <div class="lg:col-span-5 relative w-full flex justify-center items-center">
+                <!-- Outer Cyber Rings -->
+                <div class="absolute w-80 h-80 rounded-full border border-dashed border-neon-cyan/20 animate-[spin_40s_linear_infinite]"></div>
+                <div class="absolute w-[360px] h-[360px] rounded-full border border-neon-purple/20 animate-[spin_20s_linear_infinite_reverse]"></div>
+                
+                <!-- Morphing AI Assistant Orb Visual Interface -->
+                <div class="relative w-72 h-72 rounded-full ai-orb flex items-center justify-center p-8 shadow-neon-blue cursor-pointer transition-transform duration-500 hover:scale-110" id="hero-ai-orb-trigger" title="Interact with the Orb!">
+                    <div class="absolute inset-2 bg-slate-950 rounded-full flex flex-col justify-center items-center text-center p-6 border border-white/10">
+                        <!-- Holographic Waves -->
+                        <div class="absolute inset-0 bg-gradient-to-b from-neon-cyan/5 via-transparent to-neon-purple/5 animate-pulse rounded-full"></div>
+                        <i class="fas fa-brain text-5xl text-transparent bg-clip-text bg-gradient-to-r from-neon-blue via-neon-cyan to-neon-purple mb-3 animate-pulse"></i>
+                        <span class="font-cyber font-bold text-sm text-white tracking-widest uppercase">APC COGNITIVE CORE</span>
+                        <p class="text-[10px] text-neon-cyan font-mono mt-1" id="orb-status-text">SYSTEM: IDLE / CLICK ME</p>
+                        <!-- Orbital Rings Inside -->
+                        <div class="w-full h-1 bg-gradient-to-r from-transparent via-neon-cyan to-transparent mt-3 animate-pulse"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Metrics Panel Section -->
+    <section class="py-8 border-y border-white/5 relative z-10 glass-panel">
+        <div class="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+            <!-- Counter Item 1 -->
+            <div class="flex flex-col items-center">
+                <span class="text-3xl md:text-4xl font-cyber font-bold text-white tracking-tight" id="count-projects">0</span>
+                <span class="text-xs font-mono text-neon-cyan mt-1 uppercase tracking-widest">Enterprise Projects</span>
+            </div>
+            <!-- Counter Item 2 -->
+            <div class="flex flex-col items-center">
+                <span class="text-3xl md:text-4xl font-cyber font-bold text-white tracking-tight" id="count-uptime">99.9</span>
+                <span class="text-xs font-mono text-neon-blue mt-1 uppercase tracking-widest">Core Architecture SLA</span>
+            </div>
+            <!-- Counter Item 3 -->
+            <div class="flex flex-col items-center">
+                <span class="text-3xl md:text-4xl font-cyber font-bold text-white tracking-tight" id="count-threats">0</span>
+                <span class="text-xs font-mono text-neon-purple mt-1 uppercase tracking-widest">Mitigated Threats</span>
+            </div>
+            <!-- Counter Item 4 -->
+            <div class="flex flex-col items-center">
+                <span class="text-3xl md:text-4xl font-cyber font-bold text-[#d2813f] tracking-tight" id="count-members">24/7</span>
+                <span class="text-xs font-mono text-white/70 mt-1 uppercase tracking-widest">Engineering Matrix</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Features Section (AI Dashboard Preview) -->
+    <section id="ai-dashboard" class="py-24 px-6 md:px-12 lg:px-24 relative z-10">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="text-neon-cyan font-mono text-xs uppercase tracking-[0.25em] font-semibold">NEURO-MONITOR</span>
+                <h2 class="text-3xl md:text-5xl font-cyber font-bold text-white mt-2">Active AI Dashboard Preview</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-neon-blue to-neon-purple mx-auto mt-4 rounded-full"></div>
+                <p class="text-neutral-400 mt-4 max-w-2xl mx-auto">
+                    Experience dynamic parameter scaling inside the AdityaProCoders quantum interface console. Tune parameters and observe synthetic graph updates live.
+                </p>
+            </div>
+
+            <!-- Dashboard Layout Grid -->
+            <div class="grid lg:grid-cols-12 gap-8 items-stretch">
+                <!-- Panel Left: Dynamic Slider Controls -->
+                <div class="lg:col-span-4 glass-panel rounded-2xl p-6 border border-white/5 flex flex-col justify-between">
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-2 mb-4">
+                            <i class="fas fa-sliders-h text-neon-cyan"></i>
+                            <h3 class="font-cyber font-bold text-lg text-white uppercase tracking-wider">Engine Controls</h3>
+                        </div>
+                        
+                        <!-- Slider Item 1 -->
+                        <div>
+                            <div class="flex justify-between text-xs font-mono text-neutral-400 mb-1">
+                                <span>AI NEURAL THROTTLE</span>
+                                <span class="text-neon-blue" id="slider-val-throttle">85%</span>
+                            </div>
+                            <input type="range" id="slider-throttle" min="10" max="100" value="85" class="w-full accent-neon-blue bg-[#090e21] rounded-lg appearance-none h-2 cursor-pointer">
+                        </div>
+
+                        <!-- Slider Item 2 -->
+                        <div>
+                            <div class="flex justify-between text-xs font-mono text-neutral-400 mb-1">
+                                <span>CYBER BARRIER FREQUENCY</span>
+                                <span class="text-neon-purple" id="slider-val-barrier">4.5 GHz</span>
+                            </div>
+                            <input type="range" id="slider-barrier" min="1" max="10" value="5" step="0.5" class="w-full accent-neon-purple bg-[#090e21] rounded-lg appearance-none h-2 cursor-pointer">
+                        </div>
+
+                        <!-- Slider Item 3 -->
+                        <div>
+                            <div class="flex justify-between text-xs font-mono text-neutral-400 mb-1">
+                                <span>SWARM NODE DISTRIBUTION</span>
+                                <span class="text-neon-cyan" id="slider-val-swarm">140 Nodes</span>
+                            </div>
+                            <input type="range" id="slider-swarm" min="20" max="300" value="140" class="w-full accent-neon-cyan bg-[#090e21] rounded-lg appearance-none h-2 cursor-pointer">
+                        </div>
+                    </div>
+
+                    <!-- Live System Diagnostics Panel -->
+                    <div class="border-t border-white/5 pt-6 mt-6 space-y-3">
+                        <div class="flex justify-between items-center text-xs font-mono">
+                            <span class="text-neutral-400">NODE STATUS:</span>
+                            <span class="text-neon-green font-bold">● ACTIVE</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs font-mono">
+                            <span class="text-neutral-400">LATENCY INDEX:</span>
+                            <span class="text-neon-cyan font-bold" id="panel-latency">14 ms</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs font-mono">
+                            <span class="text-neutral-400">BANDWIDTH LOAD:</span>
+                            <span class="text-neon-purple font-bold" id="panel-bandwidth">1.8 Gbps</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel Right: Live Interactive Graph Visualizer & Terminal System Feed -->
+                <div class="lg:col-span-8 grid md:grid-cols-2 gap-6 items-stretch">
+                    
+                    <!-- Graph Panel -->
+                    <div class="glass-panel rounded-2xl p-6 border border-white/5 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center mb-4">
+                                <h4 class="font-cyber font-bold text-sm tracking-widest text-white uppercase">SYNTHETIC LOAD SPECTRUM</h4>
+                                <span class="text-[10px] font-mono text-neutral-500 bg-black/40 px-2.5 py-1 rounded-full border border-white/5">REALTIME FEED</span>
+                            </div>
+                            <!-- Canvas based SVG Live Graph -->
+                            <div class="h-48 w-full flex items-end justify-between gap-1 border-b border-l border-white/10 pb-1 pl-1 relative bg-[#030611]/40 rounded p-1">
+                                <div class="absolute inset-0 flex flex-col justify-between p-2 pointer-events-none text-[8px] font-mono text-neutral-600">
+                                    <span>MAX (100%)</span>
+                                    <span>AVG (50%)</span>
+                                    <span>MIN (0%)</span>
+                                </div>
+                                <!-- Dynamically generated vertical bars in SVG layout -->
+                                <svg id="graph-svg" class="w-full h-full text-neon-blue" viewBox="0 0 400 180" preserveAspectRatio="none">
+                                    <defs>
+                                        <linearGradient id="gradient-graph" x1="0%" y1="0%" x2="0%" y2="100%">
+                                            <stop offset="0%" stop-color="#00f0ff" stop-opacity="0.8"/>
+                                            <stop offset="100%" stop-color="#bd00ff" stop-opacity="0.1"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <path id="graph-line" fill="url(#gradient-graph)" stroke="#00f0ff" stroke-width="2.5" d="" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between text-[11px] font-mono text-neutral-400 mt-4">
+                            <span>0.0s SEC RANGE</span>
+                            <span class="text-neon-cyan">INTEGRATED GRAPH CONSOLE</span>
+                            <span>ACTIVE STABILITY</span>
+                        </div>
+                    </div>
+
+                    <!-- Terminal System Feed -->
+                    <div class="glass-panel rounded-2xl p-6 border border-white/5 flex flex-col justify-between bg-black/40">
+                        <div>
+                            <div class="flex justify-between items-center mb-4">
+                                <h4 class="font-cyber font-bold text-sm tracking-widest text-white uppercase">SYSTEM TELEMETRY STREAM</h4>
+                                <div class="flex gap-1">
+                                    <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                                    <span class="w-2 h-2 rounded-full bg-yellow-500"></span>
+                                    <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                                </div>
+                            </div>
+                            <!-- Dynamic stream rows inside glass pane container -->
+                            <div class="h-48 overflow-y-auto font-mono text-[10px] text-neon-green space-y-1.5 p-3 bg-black/60 rounded-xl border border-white/5" id="console-stream-feed">
+                                <!-- Telemetry generated dynamically via javascript loop -->
+                            </div>
+                        </div>
+                        <button id="clear-stream-btn" class="mt-4 w-full bg-white/5 hover:bg-white/10 border border-white/10 py-2 rounded-xl text-center font-cyber text-xs font-bold text-white uppercase tracking-wider transition-all">
+                            <i class="fas fa-trash-alt mr-2"></i> Flush Stream Logs
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 px-6 md:px-12 lg:px-24 relative z-10 border-t border-white/5 bg-[#030612]/30">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Left Side: Interactive Bento Narrative Cards -->
+                <div class="lg:col-span-5 flex flex-col justify-center text-left gap-6">
+                    <span class="text-neon-cyan font-mono text-xs uppercase tracking-[0.25em] font-semibold">ABOUT APC BRAND</span>
+                    <h2 class="text-3xl md:text-5xl font-cyber font-bold text-white">Forging The Matrix Of Digital Reality</h2>
+                    <p class="text-neutral-300 leading-relaxed text-sm md:text-base">
+                        AdityaProCoders was founded as an elite technological incubator designed to craft next-generation digital ecosystems. We combine deep cryptographic security with AI mechanics and extreme front-end visual performance.
+                    </p>
+                    
+                    <div class="space-y-4">
+                        <div class="flex gap-4 items-start">
+                            <div class="p-3 rounded-lg bg-neon-blue/10 border border-neon-blue/20 text-neon-blue text-sm mt-1">
+                                <i class="fas fa-bullseye"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-cyber font-bold text-white uppercase text-sm tracking-wider">Mission Blueprint</h4>
+                                <p class="text-neutral-400 text-xs mt-1">Deploy high-performance, clean-code architectures that elevate enterprise infrastructure and provide frictionless, responsive scaling.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 items-start">
+                            <div class="p-3 rounded-lg bg-neon-purple/10 border border-neon-purple/20 text-neon-purple text-sm mt-1">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-cyber font-bold text-white uppercase text-sm tracking-wider">Vision Matrix</h4>
+                                <p class="text-neutral-400 text-xs mt-1">Pioneer secure full-stack structures backed by artificial intelligence, making high-end technological modernization globally accessible.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Side: Graphic Bento Grid Representation of AdityaProCoders Capabilities -->
+                <div class="lg:col-span-7 grid grid-cols-2 gap-4">
+                    
+                    <!-- Capability Card 1 -->
+                    <div class="glass-panel hover-glow rounded-2xl p-6 border border-white/5 text-left relative overflow-hidden group">
+                        <div class="absolute -right-8 -bottom-8 w-24 h-24 bg-neon-blue/10 rounded-full blur-xl group-hover:scale-150 transition-all duration-300"></div>
+                        <i class="fas fa-fingerprint text-neon-blue text-2xl mb-4"></i>
+                        <h4 class="font-cyber font-bold text-white uppercase text-sm mb-2">Absolute Security</h4>
+                        <p class="text-neutral-400 text-xs">High-end application layer defensive protocols, sanitization matrices, and secure authentication models built natively.</p>
+                    </div>
+
+                    <!-- Capability Card 2 -->
+                    <div class="glass-panel hover-glow rounded-2xl p-6 border border-white/5 text-left relative overflow-hidden group">
+                        <div class="absolute -right-8 -bottom-8 w-24 h-24 bg-neon-purple/10 rounded-full blur-xl group-hover:scale-150 transition-all duration-300"></div>
+                        <i class="fas fa-bolt text-neon-purple text-2xl mb-4"></i>
+                        <h4 class="font-cyber font-bold text-white uppercase text-sm mb-2">Extreme Speeds</h4>
+                        <p class="text-neutral-400 text-xs">Server responses hitting millisecond baselines, combined with modern SPA frameworks optimized for SEO execution.</p>
+                    </div>
+
+                    <!-- Capability Card 3 -->
+                    <div class="glass-panel hover-glow rounded-2xl p-6 border border-white/5 text-left relative overflow-hidden group">
+                        <div class="absolute -right-8 -bottom-8 w-24 h-24 bg-neon-cyan/10 rounded-full blur-xl group-hover:scale-150 transition-all duration-300"></div>
+                        <i class="fas fa-sliders text-neon-cyan text-2xl mb-4"></i>
+                        <h4 class="font-cyber font-bold text-white uppercase text-sm mb-2">Fluid Adaptive UI</h4>
+                        <p class="text-neutral-400 text-xs">Aesthetic structures and pixel perfect alignments fitting fluidly from small screens to ultra-wide desktop monitors.</p>
+                    </div>
+
+                    <!-- Capability Card 4 -->
+                    <div class="glass-panel hover-glow rounded-2xl p-6 border border-white/5 text-left relative overflow-hidden group">
+                        <div class="absolute -right-8 -bottom-8 w-24 h-24 bg-amber-500/10 rounded-full blur-xl group-hover:scale-150 transition-all duration-300"></div>
+                        <i class="fas fa-project-diagram text-amber-500 text-2xl mb-4"></i>
+                        <h4 class="font-cyber font-bold text-white uppercase text-sm mb-2">Infinite Scaling</h4>
+                        <p class="text-neutral-400 text-xs">Microservices, modular cloud orchestrations, and secure databases maintaining reliability under dense consumer strain.</p>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-24 px-6 md:px-12 lg:px-24 relative z-10">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="text-neon-cyan font-mono text-xs uppercase tracking-[0.25em] font-semibold">CORE ARCHITECTURES</span>
+                <h2 class="text-3xl md:text-5xl font-cyber font-bold text-white mt-2">Our Specialized IT Matrix</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-neon-blue to-neon-purple mx-auto mt-4 rounded-full"></div>
+                <p class="text-neutral-400 mt-4 max-w-2xl mx-auto">
+                    We architect complete, secure digital ecosystems with stunning client interfaces and reliable server backends.
+                </p>
+            </div>
+
+            <!-- Services Grid with interactive flip styles and details trigger -->
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <!-- Service 1: Web & APP Development -->
+                <div class="glass-panel hover-glow rounded-2xl p-6 border border-white/5 text-left flex flex-col justify-between group transition-all duration-300 hover:-translate-y-2">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-neon-blue/10 border border-neon-blue/20 flex items-center justify-center text-neon-blue mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-laptop-code text-xl"></i>
+                        </div>
+                        <h3 class="font-cyber font-bold text-lg text-white mb-2">Web & App Systems</h3>
+                        <p class="text-neutral-400 text-xs leading-relaxed mb-6">
+                            Tailored high-performance web ecosystems and native Android/iOS solutions built using React and modern server engines.
+                        </p>
+                    </div>
+                    <span class="font-mono text-[10px] text-neon-blue uppercase tracking-widest font-semibold flex items-center gap-2 group-hover:translate-x-2 transition-transform">
+                        Active Deployment <i class="fas fa-chevron-right text-[8px]"></i>
+                    </span>
+                </div>
+
+                <!-- Service 2: Software Development -->
+                <div class="glass-panel hover-glow rounded-2xl p-6 border border-white/5 text-left flex flex-col justify-between group transition-all duration-300 hover:-translate-y-2">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-neon-purple/10 border border-neon-purple/20 flex items-center justify-center text-neon-purple mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-cubes text-xl"></i>
+                        </div>
+                        <h3 class="font-cyber font-bold text-lg text-white mb-2">Software & SaaS</h3>
+                        <p class="text-neutral-400 text-xs leading-relaxed mb-6">
+                            Scalable custom software architectures and cloud-native software packages designed with flawless performance and integration.
+                        </p>
+                    </div>
+                    <span class="font-mono text-[10px] text-neon-purple uppercase tracking-widest font-semibold flex items-center gap-2 group-hover:translate-x-2 transition-transform">
+                        Active Deployment <i class="fas fa-chevron-right text-[8px]"></i>
+                    </span>
+                </div>
+
+                <!-- Service 3: UI / UX Design -->
+                <div class="glass-panel hover-glow rounded-2xl p-6 border border-white/5 text-left flex flex-col justify-between group transition-all duration-300 hover:-translate-y-2">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-neon-cyan/10 border border-neon-cyan/20 flex items-center justify-center text-neon-cyan mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-palette text-xl"></i>
+                        </div>
+                        <h3 class="font-cyber font-bold text-lg text-white mb-2">UI / UX Design Matrix</h3>
+                        <p class="text-neutral-400 text-xs leading-relaxed mb-6">
+                            Bespoke wireframes, interactive user flows, and aesthetic components centered heavily on extreme visual impact.
+                        </p>
+                    </div>
+                    <span class="font-mono text-[10px] text-neon-cyan uppercase tracking-widest font-semibold flex items-center gap-2 group-hover:translate-x-2 transition-transform">
+                        Active Deployment <i class="fas fa-chevron-right text-[8px]"></i>
+                    </span>
+                </div>
+
+                <!-- Service 4: Cybersecurity -->
+                <div class="glass-panel hover-glow rounded-2xl p-6 border border-white/5 text-left flex flex-col justify-between group transition-all duration-300 hover:-translate-y-2">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400 mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-shield-halved text-xl"></i>
+                        </div>
+                        <h3 class="font-cyber font-bold text-lg text-white mb-2">Cyber Defense Matrix</h3>
+                        <p class="text-neutral-400 text-xs leading-relaxed mb-6">
+                            Advanced penetrations audits, vulnerability diagnostics, threat vector neutralization, and robust encryption implementations.
+                        </p>
+                    </div>
+                    <span class="font-mono text-[10px] text-red-400 uppercase tracking-widest font-semibold flex items-center gap-2 group-hover:translate-x-2 transition-transform">
+                        Active Deployment <i class="fas fa-chevron-right text-[8px]"></i>
+                    </span>
+                </div>
+
+                <!-- Service 5: Cloud & DevOps -->
+                <div class="glass-panel hover-glow rounded-2xl p-6 border border-white/5 text-left flex flex-col justify-between group transition-all duration-300 hover:-translate-y-2">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-cloud-sun text-xl"></i>
+                        </div>
+                        <h3 class="font-cyber font-bold text-lg text-white mb-2">Cloud & DevOps Integration</h3>
+                        <p class="text-neutral-400 text-xs leading-relaxed mb-6">
+                            Automated pipeline processes (CI/CD), Docker containers, Kubernetes clustering, and smart server monitoring protocols.
+                        </p>
+                    </div>
+                    <span class="font-mono text-[10px] text-indigo-400 uppercase tracking-widest font-semibold flex items-center gap-2 group-hover:translate-x-2 transition-transform">
+                        Active Deployment <i class="fas fa-chevron-right text-[8px]"></i>
+                    </span>
+                </div>
+
+                <!-- Service 6: Data & Analytics -->
+                <div class="glass-panel hover-glow rounded-2xl p-6 border border-white/5 text-left flex flex-col justify-between group transition-all duration-300 hover:-translate-y-2">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-chart-line text-xl"></i>
+                        </div>
+                        <h3 class="font-cyber font-bold text-lg text-white mb-2">Telemetry & Analytics</h3>
+                        <p class="text-neutral-400 text-xs leading-relaxed mb-6">
+                            Realtime stream telemetry processing, comprehensive SQL/NoSQL databases, visual business diagrams, and custom analytics.
+                        </p>
+                    </div>
+                    <span class="font-mono text-[10px] text-emerald-400 uppercase tracking-widest font-semibold flex items-center gap-2 group-hover:translate-x-2 transition-transform">
+                        Active Deployment <i class="fas fa-chevron-right text-[8px]"></i>
+                    </span>
+                </div>
+
+                <!-- Service 7: AI & Automation -->
+                <div class="glass-panel hover-glow rounded-2xl p-6 border border-white/5 text-left flex flex-col justify-between group transition-all duration-300 hover:-translate-y-2">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-400 mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-robot text-xl"></i>
+                        </div>
+                        <h3 class="font-cyber font-bold text-lg text-white mb-2">AI Systems & Chatbots</h3>
+                        <p class="text-neutral-400 text-xs leading-relaxed mb-6">
+                            Tailor-made NLP tools, smart agent interactions, neural search filters, and automatic workflow algorithms.
+                        </p>
+                    </div>
+                    <span class="font-mono text-[10px] text-pink-400 uppercase tracking-widest font-semibold flex items-center gap-2 group-hover:translate-x-2 transition-transform">
+                        Active Deployment <i class="fas fa-chevron-right text-[8px]"></i>
+                    </span>
+                </div>
+
+                <!-- Service 8: Maintenance & Support -->
+                <div class="glass-panel hover-glow rounded-2xl p-6 border border-white/5 text-left flex flex-col justify-between group transition-all duration-300 hover:-translate-y-2">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-[#d2813f]/10 border border-[#d2813f]/20 flex items-center justify-center text-[#d2813f] mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-clock-rotate-left text-xl"></i>
+                        </div>
+                        <h3 class="font-cyber font-bold text-lg text-white mb-2">24/7 Support SLA</h3>
+                        <p class="text-neutral-400 text-xs leading-relaxed mb-6">
+                            Constant system checks, version upgrade updates, speed optimizations, and proactive system bug tracking.
+                        </p>
+                    </div>
+                    <span class="font-mono text-[10px] text-[#d2813f] uppercase tracking-widest font-semibold flex items-center gap-2 group-hover:translate-x-2 transition-transform">
+                        Active Deployment <i class="fas fa-chevron-right text-[8px]"></i>
+                    </span>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Project Cost/Tech Recommendation Tool -->
+    <section id="quote-calculator" class="py-24 px-6 md:px-12 lg:px-24 relative z-10 bg-black/40 border-t border-b border-white/5">
+        <div class="max-w-4xl mx-auto glass-panel rounded-3xl p-8 md:p-12 border border-neon-cyan/20">
+            <div class="text-center mb-8">
+                <span class="text-neon-cyan font-mono text-xs uppercase tracking-[0.25em] font-semibold">APC AI RECOMMENDATION CONSOLE</span>
+                <h3 class="text-2xl md:text-4xl font-cyber font-bold text-white mt-1">Configure Your Project Stack</h3>
+                <p class="text-neutral-400 text-xs md:text-sm mt-2">Adjust core digital features and receive an instant estimation matching modern standard SLAs.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 items-start">
+                <!-- Inputs Section -->
+                <div class="space-y-6">
+                    <div>
+                        <label class="block font-cyber font-bold text-xs uppercase tracking-wider text-neutral-400 mb-2">Project Classification</label>
+                        <select id="calc-project-type" class="w-full bg-[#080c1d] border border-white/10 rounded-xl p-3 text-sm text-white focus:border-neon-cyan focus:outline-none transition-all">
+                            <option value="web" data-multiplier="1.0">Premium Web Ecosystem</option>
+                            <option value="saas" data-multiplier="1.5">Custom Software / SaaS</option>
+                            <option value="mobile" data-multiplier="1.4">Mobile Android/iOS App</option>
+                            <option value="cyber" data-multiplier="1.8">Security & Devops Audit</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block font-cyber font-bold text-xs uppercase tracking-wider text-neutral-400 mb-2">Complexity & Page Scope</label>
+                        <input type="range" id="calc-pages" min="1" max="25" value="5" class="w-full accent-neon-cyan bg-[#090e21] rounded-lg appearance-none h-2 cursor-pointer">
+                        <div class="flex justify-between text-xs font-mono text-neutral-500 mt-1">
+                            <span>Simple (1 Page)</span>
+                            <span class="text-neon-cyan font-bold" id="calc-pages-value">5 Pages / Modules</span>
+                            <span>Enterprise (25)</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <label class="block font-cyber font-bold text-xs uppercase tracking-wider text-neutral-400">Additional Cyber Parameters</label>
+                        <label class="flex items-center gap-3 text-sm text-neutral-300 cursor-pointer">
+                            <input type="checkbox" id="calc-opt-ai" checked class="w-4 h-4 accent-neon-purple rounded">
+                            <span>Integrate AI Neural Chatbot</span>
+                        </label>
+                        <label class="flex items-center gap-3 text-sm text-neutral-300 cursor-pointer">
+                            <input type="checkbox" id="calc-opt-auth" class="w-4 h-4 accent-neon-purple rounded">
+                            <span>High-Grade Cryptographic Auth</span>
+                        </label>
+                        <label class="flex items-center gap-3 text-sm text-neutral-300 cursor-pointer">
+                            <input type="checkbox" id="calc-opt-seo" checked class="w-4 h-4 accent-neon-purple rounded">
+                            <span>Advanced Performance & SEO Matrix</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Outputs Section -->
+                <div class="bg-[#040713] rounded-2xl p-6 border border-white/10 flex flex-col justify-between h-full relative overflow-hidden">
+                    <!-- Laser Overlay -->
+                    <div class="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-neon-blue to-neon-purple shadow-neon-blue"></div>
+                    
+                    <div class="space-y-4">
+                        <h4 class="font-cyber font-bold text-xs uppercase tracking-wider text-neutral-400">Calculated Metrics</h4>
+                        
+                        <div>
+                            <span class="text-xs text-neutral-500 font-mono block">ESTIMATED ARCHITECTURE INVESTMENT</span>
+                            <span class="text-3xl md:text-4xl font-cyber font-bold text-neon-cyan tracking-tight glow-text-cyan" id="calc-cost-display">$1,250</span>
+                        </div>
+
+                        <div>
+                            <span class="text-xs text-neutral-500 font-mono block">DELIVERY TIME MATRIX</span>
+                            <span class="text-lg font-cyber text-white" id="calc-time-display">12 - 18 System Days</span>
+                        </div>
+
+                        <div>
+                            <span class="text-xs text-neutral-500 font-mono block">RECOMMENDED TECH STACK</span>
+                            <p class="text-xs text-neutral-300 mt-1" id="calc-stack-display">HTML5, Tailwind, NextJS, Python, NLP Engine</p>
+                        </div>
+                    </div>
+
+                    <a href="#contact" id="calc-submit-cta" class="mt-8 w-full bg-gradient-to-r from-neon-blue to-neon-purple py-3 rounded-xl text-center font-cyber font-bold text-xs text-white uppercase tracking-wider transition-all hover:scale-105 shadow-neon-purple block">
+                        Deploy Stack Plan <i class="fas fa-paper-plane ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section (Bento Grid with Categories) -->
+    <section id="projects" class="py-24 px-6 md:px-12 lg:px-24 relative z-10">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="text-neon-cyan font-mono text-xs uppercase tracking-[0.25em] font-semibold">BENTO COMPONENT PORTFOLIO</span>
+                <h2 class="text-3xl md:text-5xl font-cyber font-bold text-white mt-2">Pioneering Deployments</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-neon-blue to-neon-purple mx-auto mt-4 rounded-full"></div>
+                <p class="text-neutral-400 mt-4 max-w-2xl mx-auto">
+                    A filtered archive showcasing real and simulated technological modules built on rigorous code benchmarks.
+                </p>
+                
+                <!-- Filters Tabs menu -->
+                <div class="flex flex-wrap justify-center items-center gap-3 mt-8">
+                    <button class="project-filter-btn px-6 py-2 rounded-full font-cyber text-xs uppercase tracking-wider font-semibold bg-neon-blue text-black border border-neon-blue transition-all" data-filter="all">All Modules</button>
+                    <button class="project-filter-btn px-6 py-2 rounded-full font-cyber text-xs uppercase tracking-wider font-semibold bg-white/5 hover:bg-white/10 text-white border border-white/10 transition-all" data-filter="web">Web Platforms</button>
+                    <button class="project-filter-btn px-6 py-2 rounded-full font-cyber text-xs uppercase tracking-wider font-semibold bg-white/5 hover:bg-white/10 text-white border border-white/10 transition-all" data-filter="cyber">Security Audits</button>
+                    <button class="project-filter-btn px-6 py-2 rounded-full font-cyber text-xs uppercase tracking-wider font-semibold bg-white/5 hover:bg-white/10 text-white border border-white/10 transition-all" data-filter="ai">AI Systems</button>
+                </div>
+            </div>
+
+            <!-- Bento Grid Layout Container -->
+            <div id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[250px]">
+                
+                <!-- Project 1: Large Feature (Web App) -->
+                <div class="project-card md:col-span-2 row-span-2 glass-panel hover-glow rounded-3xl border border-white/5 p-8 flex flex-col justify-between group overflow-hidden relative" data-category="web">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-neon-blue/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div class="flex justify-between items-start">
+                        <span class="px-3 py-1 bg-neon-blue/10 border border-neon-blue/30 text-neon-blue rounded-full font-mono text-[9px] uppercase tracking-wider">Web Architecture</span>
+                        <span class="text-neutral-500 text-xs font-mono">STATUS: STABLE</span>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl md:text-3xl font-cyber font-bold text-white uppercase group-hover:text-neon-cyan transition-colors">AetherAI Portal: Full-Stack Web Engine</h3>
+                        <p class="text-neutral-400 text-xs md:text-sm mt-3 max-w-xl">
+                            Next-generation enterprise software console integrated with modern cloud databases, lightning-fast animations, responsive layouts, and strict authorization levels.
+                        </p>
+                        <!-- Tech Stack tags -->
+                        <div class="flex flex-wrap gap-2 mt-4">
+                            <span class="px-2.5 py-0.5 bg-neutral-800 rounded text-[10px] font-mono text-neutral-400">React 19</span>
+                            <span class="px-2.5 py-0.5 bg-neutral-800 rounded text-[10px] font-mono text-neutral-400">Tailwind V4</span>
+                            <span class="px-2.5 py-0.5 bg-neutral-800 rounded text-[10px] font-mono text-neutral-400">Node JS</span>
+                            <span class="px-2.5 py-0.5 bg-neutral-800 rounded text-[10px] font-mono text-neutral-400">PostgreSQL</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center mt-6">
+                        <button class="project-modal-trigger text-neon-cyan text-xs font-cyber font-bold uppercase tracking-widest flex items-center gap-2 hover:glow-text-cyan" data-project="aether">
+                            Launch Details Panel <i class="fas fa-arrow-up-right-from-square"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Project 2: Cloud Orchestration (Devops / Web) -->
+                <div class="project-card glass-panel hover-glow rounded-3xl border border-white/5 p-6 flex flex-col justify-between group overflow-hidden" data-category="web">
+                    <div class="flex justify-between items-start">
+                        <span class="px-3 py-1 bg-neon-purple/10 border border-neon-purple/30 text-neon-purple rounded-full font-mono text-[9px] uppercase tracking-wider">Cloud Operations</span>
+                        <span class="text-neon-green text-[10px] font-mono">LIVE PREVIEW</span>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-cyber font-bold text-white group-hover:text-neon-purple transition-colors">CloudSync DevOps Pipeline</h3>
+                        <p class="text-neutral-400 text-xs mt-2 line-clamp-3">
+                            Automatic Git deployment matrix incorporating micro-services, cluster monitors, and visual feedback consoles.
+                        </p>
+                    </div>
+                    <button class="project-modal-trigger text-neon-purple text-xs font-cyber font-bold uppercase tracking-wider flex items-center gap-2 hover:glow-text-purple mt-4" data-project="cloudsync">
+                        Details <i class="fas fa-arrow-up-right-from-square text-[10px]"></i>
+                    </button>
+                </div>
+
+                <!-- Project 3: Cyber Security System -->
+                <div class="project-card glass-panel hover-glow rounded-3xl border border-white/5 p-6 flex flex-col justify-between group overflow-hidden" data-category="cyber">
+                    <div class="flex justify-between items-start">
+                        <span class="px-3 py-1 bg-red-500/10 border border-red-500/30 text-red-400 rounded-full font-mono text-[9px] uppercase tracking-wider">Cybersecurity</span>
+                        <span class="text-red-400 text-[10px] font-mono">AUDITED</span>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-cyber font-bold text-white group-hover:text-red-400 transition-colors">CyberShield Threat Monitor</h3>
+                        <p class="text-neutral-400 text-xs mt-2 line-clamp-3">
+                            Penetration detection utility showing real-time packets, identifying threat hashes, and triggering defensive blockades.
+                        </p>
+                    </div>
+                    <button class="project-modal-trigger text-red-400 text-xs font-cyber font-bold uppercase tracking-wider flex items-center gap-2 mt-4" data-project="cybershield">
+                        Details <i class="fas fa-arrow-up-right-from-square text-[10px]"></i>
+                    </button>
+                </div>
+
+                <!-- Project 4: Quantum NLP Engine (AI) -->
+                <div class="project-card glass-panel hover-glow rounded-3xl border border-white/5 p-6 flex flex-col justify-between group overflow-hidden" data-category="ai">
+                    <div class="flex justify-between items-start">
+                        <span class="px-3 py-1 bg-neon-cyan/10 border border-neon-cyan/30 text-neon-cyan rounded-full font-mono text-[9px] uppercase tracking-wider">AI Systems</span>
+                        <span class="text-amber-500 text-[10px] font-mono">BETA RUN</span>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-cyber font-bold text-white group-hover:text-neon-cyan transition-colors">Quantum NLP Semantic Engine</h3>
+                        <p class="text-neutral-400 text-xs mt-2 line-clamp-3">
+                            A highly optimized natural language parser feeding responsive embeddings into cloud models with milliseconds latency.
+                        </p>
+                    </div>
+                    <button class="project-modal-trigger text-neon-cyan text-xs font-cyber font-bold uppercase tracking-wider flex items-center gap-2 hover:glow-text-cyan mt-4" data-project="nlp-engine">
+                        Details <i class="fas fa-arrow-up-right-from-square text-[10px]"></i>
+                    </button>
+                </div>
+
+                <!-- Project 5: Responsive Mobile UI Shell -->
+                <div class="project-card md:col-span-2 glass-panel hover-glow rounded-3xl border border-white/5 p-8 flex flex-col justify-between group overflow-hidden" data-category="web">
+                    <div class="flex justify-between items-start">
+                        <span class="px-3 py-1 bg-amber-500/10 border border-amber-500/30 text-amber-500 rounded-full font-mono text-[9px] uppercase tracking-wider">App Framework</span>
+                        <span class="text-neutral-400 text-[10px] font-mono">COMPLETED</span>
+                    </div>
+                    <div>
+                        <h3 class="text-xl md:text-2xl font-cyber font-bold text-white group-hover:text-amber-500 transition-colors">NeuroUX Adaptive UI Shell</h3>
+                        <p class="text-neutral-400 text-xs mt-3">
+                            A responsive visual application shell allowing users to switch between layouts flawlessly. Implements optimized SVG vector graphics and hardware accelerated canvas rendering.
+                        </p>
+                    </div>
+                    <button class="project-modal-trigger text-amber-500 text-xs font-cyber font-bold uppercase tracking-wider flex items-center gap-2 mt-4 self-start" data-project="neuroux">
+                        Launch Details Panel <i class="fas fa-arrow-up-right-from-square text-[10px]"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Details Expanded Modal Popups -->
+    <div id="project-modal" class="fixed inset-0 z-50 glass-panel-heavy hidden flex-items-center justify-center p-6 transition-all duration-300">
+        <div class="bg-[#06091b] rounded-3xl border border-neon-cyan/30 max-w-2xl w-full p-8 relative shadow-neon-blue max-h-[85vh] overflow-y-auto">
+            <button id="project-modal-close" class="absolute top-6 right-6 text-white hover:text-neon-cyan text-xl">
+                <i class="fas fa-times"></i>
+            </button>
+            <div id="modal-content-area" class="space-y-6">
+                <!-- Data populated dynamically on click -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Tech Stack Marquee Section -->
+    <section id="tech-stack" class="py-24 relative z-10 overflow-hidden border-t border-b border-white/5 bg-[#030611]/40">
+        <div class="max-w-7xl mx-auto px-6 md:px-12 mb-12">
+            <div class="text-center">
+                <span class="text-neon-cyan font-mono text-xs uppercase tracking-[0.25em] font-semibold">TECHNOLOGY MATRIX</span>
+                <h2 class="text-3xl md:text-5xl font-cyber font-bold text-white mt-2">Active Tech Stack Suite</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-neon-blue to-neon-purple mx-auto mt-4 rounded-full"></div>
+                
+                <!-- Live Tech Search Box -->
+                <div class="max-w-md mx-auto mt-8 relative">
+                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500 text-xs"></i>
+                    <input type="text" id="tech-search" placeholder="Filter Technologies (e.g. React, Docker...)" class="w-full bg-[#080c1e] border border-white/10 rounded-full py-2.5 pl-10 pr-4 font-mono text-xs text-white focus:border-neon-cyan focus:outline-none focus:shadow-neon-cyan/20 transition-all">
+                </div>
+            </div>
+        </div>
+
+        <!-- Tech Marquee Container -->
+        <div class="flex overflow-hidden relative w-full select-none" id="marquee-container">
+            <div class="flex gap-6 animate-marquee whitespace-nowrap py-4" id="marquee-track">
+                <!-- Cards will repeat to allow infinite loop styling -->
+                <!-- React Card -->
+                <div class="tech-item glass-panel flex items-center gap-3 px-6 py-3 rounded-xl border border-white/5 hover:border-neon-cyan hover:scale-105 transition-all text-white cursor-default">
+                    <i class="fab fa-react text-neon-blue text-xl"></i>
+                    <span class="font-cyber text-sm font-semibold tracking-wider">REACT</span>
+                </div>
+                <!-- Node JS Card -->
+                <div class="tech-item glass-panel flex items-center gap-3 px-6 py-3 rounded-xl border border-white/5 hover:border-neon-cyan hover:scale-105 transition-all text-white cursor-default">
+                    <i class="fab fa-node-js text-emerald-400 text-xl"></i>
+                    <span class="font-cyber text-sm font-semibold tracking-wider">NODE JS</span>
+                </div>
+                <!-- Python Card -->
+                <div class="tech-item glass-panel flex items-center gap-3 px-6 py-3 rounded-xl border border-white/5 hover:border-neon-cyan hover:scale-105 transition-all text-white cursor-default">
+                    <i class="fab fa-python text-yellow-400 text-xl"></i>
+                    <span class="font-cyber text-sm font-semibold tracking-wider">PYTHON</span>
+                </div>
+                <!-- Docker Card -->
+                <div class="tech-item glass-panel flex items-center gap-3 px-6 py-3 rounded-xl border border-white/5 hover:border-neon-cyan hover:scale-105 transition-all text-white cursor-default">
+                    <i class="fab fa-docker text-neon-blue text-xl"></i>
+                    <span class="font-cyber text-sm font-semibold tracking-wider">DOCKER</span>
+                </div>
+                <!-- JS Card -->
+                <div class="tech-item glass-panel flex items-center gap-3 px-6 py-3 rounded-xl border border-white/5 hover:border-neon-cyan hover:scale-105 transition-all text-white cursor-default">
+                    <i class="fab fa-js text-yellow-300 text-xl"></i>
+                    <span class="font-cyber text-sm font-semibold tracking-wider">JAVASCRIPT</span>
+                </div>
+                <!-- HTML5 Card -->
+                <div class="tech-item glass-panel flex items-center gap-3 px-6 py-3 rounded-xl border border-white/5 hover:border-neon-cyan hover:scale-105 transition-all text-white cursor-default">
+                    <i class="fab fa-html5 text-orange-500 text-xl"></i>
+                    <span class="font-cyber text-sm font-semibold tracking-wider">HTML5 / CSS3</span>
+                </div>
+                <!-- GitHub Card -->
+                <div class="tech-item glass-panel flex items-center gap-3 px-6 py-3 rounded-xl border border-white/5 hover:border-neon-cyan hover:scale-105 transition-all text-white cursor-default">
+                    <i class="fab fa-github text-white text-xl"></i>
+                    <span class="font-cyber text-sm font-semibold tracking-wider">GITHUB</span>
+                </div>
+                <!-- AWS Card -->
+                <div class="tech-item glass-panel flex items-center gap-3 px-6 py-3 rounded-xl border border-white/5 hover:border-neon-cyan hover:scale-105 transition-all text-white cursor-default">
+                    <i class="fab fa-aws text-orange-400 text-xl"></i>
+                    <span class="font-cyber text-sm font-semibold tracking-wider">AWS CLOUD</span>
+                </div>
+                <!-- Tailwind Card -->
+                <div class="tech-item glass-panel flex items-center gap-3 px-6 py-3 rounded-xl border border-white/5 hover:border-neon-cyan hover:scale-105 transition-all text-white cursor-default">
+                    <i class="fab fa-css3-alt text-neon-cyan text-xl"></i>
+                    <span class="font-cyber text-sm font-semibold tracking-wider">TAILWIND CSS</span>
+                </div>
+                
+                <!-- DUPLICATE MARQUEE FOR INFINITE EFFECT -->
+                <div class="tech-item glass-panel flex items-center gap-3 px-6 py-3 rounded-xl border border-white/5 hover:border-neon-cyan hover:scale-105 transition-all text-white cursor-default">
+                    <i class="fab fa-react text-neon-blue text-xl"></i>
+                    <span class="font-cyber text-sm font-semibold tracking-wider">REACT</span>
+                </div>
+                <div class="tech-item glass-panel flex items-center gap-3 px-6 py-3 rounded-xl border border-white/5 hover:border-neon-cyan hover:scale-105 transition-all text-white cursor-default">
+                    <i class="fab fa-node-js text-emerald-400 text-xl"></i>
+                    <span class="font-cyber text-sm font-semibold tracking-wider">NODE JS</span>
+                </div>
+                <div class="tech-item glass-panel flex items-center gap-3 px-6 py-3 rounded-xl border border-white/5 hover:border-neon-cyan hover:scale-105 transition-all text-white cursor-default">
+                    <i class="fab fa-python text-yellow-400 text-xl"></i>
+                    <span class="font-cyber text-sm font-semibold tracking-wider">PYTHON</span>
+                </div>
+                <div class="tech-item glass-panel flex items-center gap-3 px-6 py-3 rounded-xl border border-white/5 hover:border-neon-cyan hover:scale-105 transition-all text-white cursor-default">
+                    <i class="fab fa-docker text-neon-blue text-xl"></i>
+                    <span class="font-cyber text-sm font-semibold tracking-wider">DOCKER</span>
+                </div>
+                <div class="tech-item glass-panel flex items-center gap-3 px-6 py-3 rounded-xl border border-white/5 hover:border-neon-cyan hover:scale-105 transition-all text-white cursor-default">
+                    <i class="fab fa-js text-yellow-300 text-xl"></i>
+                    <span class="font-cyber text-sm font-semibold tracking-wider">JAVASCRIPT</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Meet the Founder Section -->
+    <section id="founder" class="py-24 px-6 md:px-12 lg:px-24 relative z-10 bg-[#030612]/20">
+        <div class="max-w-6xl mx-auto glass-panel rounded-3xl p-8 md:p-12 border border-white/5 relative overflow-hidden">
+            <!-- Neon Accents -->
+            <div class="absolute -top-16 -left-16 w-48 h-48 rounded-full bg-neon-blue/10 blur-2xl"></div>
+            <div class="absolute -bottom-16 -right-16 w-48 h-48 rounded-full bg-neon-purple/10 blur-2xl"></div>
+
+            <div class="grid md:grid-cols-12 gap-12 items-center">
+                <!-- Founder Card Graphic Visual representation -->
+                <div class="md:col-span-4 flex flex-col items-center">
+                    <div class="relative w-56 h-56 rounded-2xl overflow-hidden border border-neon-blue/40 shadow-neon-blue group mb-4">
+                        <img id="founder-photo-el" src="pic/Photo.jpeg" alt="Aditya Kumar Singh" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x400/0b1028/00ffd1?text=Aditya+Kumar+Singh'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#050816] via-transparent to-transparent opacity-60"></div>
+                        <div class="absolute bottom-3 left-3 bg-neon-blue/20 border border-neon-blue/50 text-[10px] text-neon-cyan font-mono px-2.5 py-1 rounded-full uppercase tracking-widest font-semibold backdrop-blur-sm">FOUNDER</div>
+                    </div>
+                    <h3 class="font-cyber font-bold text-lg text-white">Aditya Kumar Singh</h3>
+                    <p class="text-xs font-mono text-neon-cyan uppercase mt-1">Founder & Lead Full Stack Engineer</p>
+                </div>
+
+                <!-- Founder Bio Text -->
+                <div class="md:col-span-8 space-y-6 text-left">
+                    <span class="text-neon-cyan font-mono text-xs uppercase tracking-[0.25em] font-semibold">LEAD MATRIX ARCHITECT</span>
+                    <h2 class="text-3xl font-cyber font-bold text-white">Meet the Founder</h2>
+                    <p class="text-neutral-300 text-sm md:text-base leading-relaxed">
+                        I am the Founder of <strong>AdityaProCoders</strong>. My primary mission is to build highly resilient, performant digital ecosystems that help brands transition seamlessly into robust web, app, and cloud operations.
+                    </p>
+                    <p class="text-neutral-400 text-xs md:text-sm leading-relaxed">
+                        With multiple successful system audits and advanced full-stack systems engineering experience, I structure software that doesn't just work—it scales under extreme volumes. Let's design something incredible.
+                    </p>
+
+                    <!-- Contact Details / Quick Social grid -->
+                    <div class="flex flex-wrap items-center gap-4 pt-4">
+                        <a href="mailto:adityaprocoder@gmail.com?subject=Project%20Inquiry&body=Hello%20Aditya%2C%0A%0AI%20want%20to%20discuss%20a%20project." class="bg-gradient-to-r from-neon-blue to-neon-purple px-6 py-3 rounded-xl font-cyber font-bold text-xs uppercase text-white shadow-neon-purple hover:scale-105 transition-all">
+                            <i class="fas fa-envelope mr-2"></i> Contact Founder
+                        </a>
+                        <div class="flex gap-3 text-lg">
+                            <a href="https://www.instagram.com/adityaprocoders/" target="_blank" class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 hover:border-neon-cyan flex items-center justify-center text-white hover:text-neon-cyan transition-all" title="Instagram Matrix"><i class="fab fa-instagram"></i></a>
+                            <a href="https://linkedin.com/in/adityaprocoder?" target="_blank" class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 hover:border-neon-cyan flex items-center justify-center text-white hover:text-neon-cyan transition-all" title="LinkedIn Profile"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="https://www.facebook.com/mradityasingh886/" target="_blank" class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 hover:border-neon-cyan flex items-center justify-center text-white hover:text-neon-cyan transition-all" title="Facebook Page"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://www.youtube.com/@adityaprocoder" target="_blank" class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 hover:border-neon-cyan flex items-center justify-center text-white hover:text-neon-cyan transition-all" title="YouTube Channel"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-24 px-6 md:px-12 lg:px-24 relative z-10">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="text-neon-cyan font-mono text-xs uppercase tracking-[0.25em] font-semibold">PARTNER REVIEWS</span>
+                <h2 class="text-3xl md:text-5xl font-cyber font-bold text-white mt-2">What Our Clients are Saying</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-neon-blue to-neon-purple mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <!-- Testimonials Grid Scroll Tracker wrapper -->
+            <div class="grid md:grid-cols-3 gap-6">
+                
+                <!-- Review 1 -->
+                <div class="glass-panel p-6 rounded-2xl border border-white/5 text-left flex flex-col justify-between hover:border-neon-blue transition-all">
+                    <div>
+                        <div class="flex text-yellow-400 text-xs gap-1 mb-4">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <p class="text-neutral-300 text-xs md:text-sm leading-relaxed italic">
+                            "I came with a vague idea and they turned it into a complete solution. Performance was phenomenal."
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-3 mt-6">
+                        <img src="https://i.pravatar.cc/100?img=12" class="w-10 h-10 rounded-full border border-neon-cyan" alt="Reviewer">
+                        <div>
+                            <h4 class="font-cyber font-bold text-white text-xs uppercase">Alisa Olivia</h4>
+                            <span class="text-[10px] text-neutral-400 font-mono uppercase">CTO, Ritovex</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 2 -->
+                <div class="glass-panel p-6 rounded-2xl border border-white/5 text-left flex flex-col justify-between hover:border-neon-purple transition-all">
+                    <div>
+                        <div class="flex text-yellow-400 text-xs gap-1 mb-4">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <p class="text-neutral-300 text-xs md:text-sm leading-relaxed italic">
+                            "Very responsive team. Excellent communication and prompt delivery. Highly technical standard of security checks."
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-3 mt-6">
+                        <img src="https://i.pravatar.cc/100?img=32" class="w-10 h-10 rounded-full border border-neon-cyan" alt="Reviewer">
+                        <div>
+                            <h4 class="font-cyber font-bold text-white text-xs uppercase">Jordan Walk</h4>
+                            <span class="text-[10px] text-neutral-400 font-mono uppercase">Software Architect</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 3 -->
+                <div class="glass-panel p-6 rounded-2xl border border-white/5 text-left flex flex-col justify-between hover:border-neon-cyan transition-all">
+                    <div>
+                        <div class="flex text-yellow-400 text-xs gap-1 mb-4">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <p class="text-neutral-300 text-xs md:text-sm leading-relaxed italic">
+                            "Highly reliable IT partner. Would recommend without hesitation to any startup looking for robust AI integrations."
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-3 mt-6">
+                        <img src="https://i.pravatar.cc/100?img=45" class="w-10 h-10 rounded-full border border-neon-cyan" alt="Reviewer">
+                        <div>
+                            <h4 class="font-cyber font-bold text-white text-xs uppercase">Emma Stone</h4>
+                            <span class="text-[10px] text-neutral-400 font-mono uppercase">Founder, Startify</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 px-6 md:px-12 lg:px-24 relative z-10 border-t border-white/5">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid lg:grid-cols-12 gap-12 items-stretch">
+                
+                <!-- Left Side: Interactive Map Coordinates & Quick Address info -->
+                <div class="lg:col-span-5 flex flex-col justify-between text-left space-y-8">
+                    <div>
+                        <span class="text-neon-cyan font-mono text-xs uppercase tracking-[0.25em] font-semibold">GET IN TOUCH</span>
+                        <h2 class="text-3xl md:text-5xl font-cyber font-bold text-white mt-2">Access Portal Matrix</h2>
+                        <p class="text-neutral-400 mt-4 text-sm leading-relaxed">
+                            Have an interesting project blueprint, business automation requirement, or audit query? Secure a communication terminal route directly.
+                        </p>
+                    </div>
+
+                    <!-- Virtual Matrix Map Area -->
+                    <div class="glass-panel rounded-2xl p-4 border border-white/5 h-64 flex flex-col justify-between relative overflow-hidden bg-[#030611]">
+                        <!-- Grid Lines inside Map -->
+                        <div class="absolute inset-0 cyber-grid opacity-20"></div>
+                        <!-- Radar Pulse Animation representing India HQ location -->
+                        <div class="absolute top-[60%] left-[65%] transform -translate-x-1/2 -translate-y-1/2">
+                            <span class="absolute inline-flex h-8 w-8 rounded-full bg-neon-cyan opacity-40 animate-ping"></span>
+                            <span class="absolute inline-flex h-4 w-4 rounded-full bg-neon-cyan opacity-80"></span>
+                        </div>
+                        
+                        <div class="relative z-10 font-mono text-[9px] text-neon-cyan space-y-1 bg-black/60 p-2.5 rounded-lg border border-white/5 self-start">
+                            <p>🛰️ ACTIVE NODE RECONNAISSANCE</p>
+                            <p>LOCALE: INDIA NETWORK GRID</p>
+                        </div>
+
+                        <div class="relative z-10 font-cyber font-bold text-xs text-white uppercase bg-black/40 p-3 rounded-lg flex items-center justify-between border border-white/5">
+                            <span>AdityaProCoders HQ Grid</span>
+                            <span class="text-neon-cyan font-mono text-[10px]">PING STATUS: 28ms</span>
+                        </div>
+                    </div>
+
+                    <!-- Quick Information List -->
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3 font-mono text-xs text-neutral-300">
+                            <i class="fas fa-envelope text-neon-blue text-sm"></i>
+                            <span>adityaprocoder@gmail.com</span>
+                        </div>
+                        <div class="flex items-center gap-3 font-mono text-xs text-neutral-300">
+                            <i class="fas fa-globe text-neon-purple text-sm"></i>
+                            <span>https://adityaprocoders.github.io</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Side: Interactive Futuristic Contact Form -->
+                <div class="lg:col-span-7 glass-panel rounded-3xl p-8 border border-white/10 flex flex-col justify-between relative overflow-hidden bg-black/20">
+                    <div class="absolute top-0 right-0 w-48 h-48 bg-neon-blue/5 rounded-full blur-2xl"></div>
+                    
+                    <form id="cyber-contact-form" class="space-y-6">
+                        <!-- Simulated Command Input -->
+                        <div class="font-mono text-xs text-neon-cyan bg-black/40 p-3 rounded-lg border border-white/5 mb-2">
+                            <span>[COMMUNICATION_LINK] SECURITY STATE: SSL SECURE MATRIX</span>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block font-cyber font-bold text-xs uppercase tracking-wider text-neutral-400 mb-2">Identity Name</label>
+                                <input type="text" id="contact-name" required placeholder="Aditya Kumar" class="w-full bg-[#080c1d] border border-white/10 rounded-xl p-3 text-sm text-white focus:border-neon-cyan focus:outline-none transition-all">
+                            </div>
+                            <div>
+                                <label class="block font-cyber font-bold text-xs uppercase tracking-wider text-neutral-400 mb-2">Email Address Channel</label>
+                                <input type="email" id="contact-email" required placeholder="contact@domain.com" class="w-full bg-[#080c1d] border border-white/10 rounded-xl p-3 text-sm text-white focus:border-neon-cyan focus:outline-none transition-all">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block font-cyber font-bold text-xs uppercase tracking-wider text-neutral-400 mb-2">Project Classification</label>
+                            <select id="contact-subject" class="w-full bg-[#080c1d] border border-white/10 rounded-xl p-3 text-sm text-white focus:border-neon-cyan focus:outline-none transition-all">
+                                <option>Web Architecture Development</option>
+                                <option>SaaS Custom App Architecture</option>
+                                <option>High-grade Defensive Audits</option>
+                                <option>Neural Network & AI Support</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block font-cyber font-bold text-xs uppercase tracking-wider text-neutral-400 mb-2">Message Matrix Package</label>
+                            <textarea id="contact-message" required rows="4" placeholder="Type transmission variables here..." class="w-full bg-[#080c1d] border border-white/10 rounded-xl p-3 text-sm text-white focus:border-neon-cyan focus:outline-none transition-all"></textarea>
+                        </div>
+
+                        <!-- Submit Button with glow and transitions -->
+                        <button type="submit" class="w-full bg-gradient-to-r from-neon-blue to-neon-purple hover:from-neon-cyan hover:to-neon-purple text-white py-4 rounded-xl font-cyber font-bold text-xs uppercase tracking-widest hover:scale-[1.02] shadow-neon-purple transition-all relative group overflow-hidden">
+                            <span class="relative z-10">Broadcast Transmission <i class="fas fa-paper-plane ml-2"></i></span>
+                            <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        </button>
+                    </form>
+
+                    <!-- Submission Feedback Modal Overlay inside container -->
+                    <div id="form-success-overlay" class="absolute inset-0 bg-[#050816] z-10 flex flex-col justify-center items-center text-center p-6 hidden transition-all duration-300">
+                        <div class="w-20 h-20 rounded-full ai-orb flex items-center justify-center shadow-neon-green mb-6">
+                            <i class="fas fa-check-double text-3xl text-black"></i>
+                        </div>
+                        <h4 class="font-cyber font-bold text-2xl text-neon-cyan uppercase">TRANSMISSION BROADCASTED!</h4>
+                        <p class="text-neutral-400 text-xs md:text-sm mt-3 max-w-sm">
+                            System variables processed. The AdityaProCoders core team will intercept your request and open a responsive pipeline in 12 hours.
+                        </p>
+                        <button id="form-reset-btn" class="mt-8 bg-white/5 border border-white/10 hover:border-neon-cyan px-6 py-2 rounded-xl text-xs font-cyber font-bold text-white uppercase tracking-wider transition-all">
+                            Send New Transmission
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Floatable Custom AI Chatbot Widget (Bottom-Right) -->
+    <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+        <!-- Expanded Chat Box panel -->
+        <div id="ai-chat-box" class="w-[320px] md:w-[360px] h-[450px] rounded-3xl glass-panel-heavy border border-neon-cyan/40 shadow-neon-blue hidden flex-col justify-between overflow-hidden mb-4 transition-all duration-300">
+            <!-- Header bar -->
+            <div class="bg-[#030612]/80 border-b border-white/10 p-4 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <div class="w-2.5 h-2.5 bg-neon-cyan rounded-full animate-ping"></div>
+                    <div>
+                        <h4 class="font-cyber font-bold text-xs text-white uppercase tracking-wider">AP_COGNITIVE_BOT</h4>
+                        <span class="text-[9px] font-mono text-neon-cyan">V2.6 CORE ONLINE</span>
+                    </div>
+                </div>
+                <button id="chat-close-btn" class="text-neutral-400 hover:text-white p-1 text-sm">
+                    <i class="fas fa-minus"></i>
                 </button>
-            </li>
-        </ul>
-    </nav>
-</header>
+            </div>
 
+            <!-- Messages Stream Area -->
+            <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-3 font-mono text-xs flex flex-col">
+                <!-- System initial greeting response -->
+                <div class="self-start max-w-[80%] bg-[#080c1d] rounded-2xl p-3 border border-white/5 text-neutral-300">
+                    Greetings identity! I am the AdityaProCoders AI. Ask me about our <span class="text-neon-cyan cursor-pointer underline" onclick="insertPrompt('services')">Services</span>, <span class="text-neon-cyan cursor-pointer underline" onclick="insertPrompt('founder')">Founder Aditya</span>, or get a <span class="text-neon-cyan cursor-pointer underline" onclick="insertPrompt('estimate')">Project Estimate</span>.
+                </div>
+            </div>
 
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <span class="badge">Available for Hire</span>
-           <h1>
-AdityaProCoders <br>
-<span class="highlight">
-Modern IT Company & Digital Solutions Provider
-</span>
-</h1>
-           <p>
-AdityaProCoders is a technology-driven IT company specializing in
-web development, app development, cybersecurity, UI/UX design,
-cloud solutions, and business automation services.
-</p>
-            <div class="hero-btns">
-                <a href="#" class="btn-primary">View Portfolio</a>
-                <a href="https://www.instagram.com/adityaprocoders/" class="btn-secondary">Get in Touch</a>
+            <!-- Input messaging box area -->
+            <div class="p-3 border-t border-white/5 bg-[#030611]/80 flex gap-2">
+                <input type="text" id="chat-input" placeholder="Query system network..." class="flex-1 bg-[#080c1d] border border-white/10 rounded-full px-4 py-2 text-xs text-white focus:outline-none focus:border-neon-cyan">
+                <button id="chat-send-btn" class="w-8 h-8 rounded-full bg-neon-cyan hover:scale-105 text-black flex items-center justify-center transition-all">
+                    <i class="fas fa-paper-plane text-xs"></i>
+                </button>
             </div>
         </div>
-    </section>
 
-    <section id="services" class="services-section">
-  <h2 class="section-title">Our Services</h2>
-
-  <div class="services-grid">
-
-    <div class="service-card">
-      <div class="service-img"><img src="pic/web-browser_9337672.png" alt="Web Development"></div>
-      <div class="service-title">Web & APP Development</div>
-      <p>High-performance websites and Android mobile applications with clean UI and smooth performance.</p>
+        <!-- Float Pulsing Trigger Sphere Button -->
+        <button id="chat-trigger-btn" class="w-14 h-14 rounded-full ai-orb shadow-neon-cyan flex items-center justify-center relative hover:scale-110 transition-transform duration-300 group" title="Open AI Interface Chat">
+            <span class="absolute inset-0 rounded-full border border-neon-cyan/40 animate-ping group-hover:scale-150"></span>
+            <i class="fas fa-robot text-black text-xl animate-bounce"></i>
+        </button>
     </div>
 
-
-    <div class="service-card">
-      <div class="service-img"><img src="pic/software-development_17789364.png" alt="Software Development"></div>
-      <div class="service-title">Software Development</div>
-      <p>Custom software and SaaS solutions tailored to business requirements.</p>
+    <!-- Glowing Alert Toast Box element container -->
+    <div id="toast-notif" class="fixed top-24 right-6 z-50 transform translate-x-[120%] transition-transform duration-500 glass-panel p-4 rounded-xl border border-neon-cyan border-l-4 flex items-center gap-3 text-xs text-white max-w-sm">
+        <i class="fas fa-satellite-dish text-neon-cyan text-sm animate-pulse"></i>
+        <div id="toast-text">Incoming system connection status.</div>
     </div>
 
-    <div class="service-card">
-      <div class="service-img"><img src="pic/user-experience_9496172.png" alt="UI UX Design"></div>
-      <div class="service-title">UI / UX Design</div>
-      <p>User-focused interface and experience design that improves engagement.</p>
-    </div>
-
-    <div class="service-card">
-      <div class="service-img"><img src="pic/cybersecurity_16941152.png" alt="Cybersecurity"></div>
-      <div class="service-title">Cybersecurity</div>
-      <p>Security audits, vulnerability testing, and protection for digital assets.</p>
-    </div>
-
-    <div class="service-card">
-      <div class="service-img"><img src="pic/cloud-setting_18044953.png" alt="Cloud & DevOps"></div>
-      <div class="service-title">Cloud & DevOps</div>
-      <p>Cloud deployment, server management, and CI/CD automation.</p>
-    </div>
-
-    <div class="service-card">
-      <div class="service-img"><img src="pic/analysis_6950582.png" alt="Data Analytics"></div>
-      <div class="service-title">Data & Analytics</div>
-      <p>Data insights, dashboards, and reporting for smarter decisions.</p>
-    </div>
-
-    <div class="service-card">
-      <div class="service-img"><img src="pic/rpa_12775407.png" alt="AI Automation"></div>
-      <div class="service-title">AI & Automation</div>
-      <p>Chatbots, AI integrations, and workflow automation solutions.</p>
-    </div>
-
-    <div class="service-card">
-      <div class="service-img"><img src="pic/technical-support_18537902.png" alt="IT Support"></div>
-      <div class="service-title">Maintenance & Support</div>
-      <p>Ongoing maintenance, updates, monitoring, and technical support.</p>
-    </div>
-
-  </div>
-</section>
-
-
-
-
-    <section id="projects" class="container">
-        <h2 class="section-title">Featured Projects</h2>
-        <div class="project-grid" id="project-container">
+    <!-- Footer Section -->
+    <footer class="py-16 px-6 md:px-12 lg:px-24 border-t border-white/5 relative z-10 glass-panel mt-12 bg-[#020510]/80">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 text-left">
+            
+            <!-- Column 1: Info & Pitch -->
+            <div class="md:col-span-5 space-y-4">
+                <a href="#home" class="flex items-center gap-3 group">
+                    <img src="https://adityaprocoders.github.io/pic/adityaprocoders.png" alt="APC Logo" class="w-8 h-8 object-contain rounded-full border border-neon-blue/30" onerror="this.src='https://placehold.co/100/050816/00f0ff?text=APC'">
+                    <span class="font-cyber font-bold text-lg tracking-wider text-white">
+                        aditya<span class="text-[#d2813f]">pro</span><span class="text-[#4dc4e2]">coders</span>
+                    </span>
+                </a>
+                <p class="text-neutral-400 text-xs leading-relaxed max-w-sm">
+                    Pioneering high-grade digital platforms, custom responsive layouts, DevOps system integrations, and neural security systems suited for tech innovators of 2026.
+                </p>
+                <!-- Security Badges inside Footer -->
+                <div class="flex items-center gap-3 pt-2">
+                    <span class="inline-flex items-center gap-1.5 bg-green-500/10 border border-green-500/30 px-2.5 py-1 rounded text-[9px] font-mono text-green-400">
+                        <i class="fas fa-lock"></i> SSL ENCRYPTED
+                    </span>
+                    <span class="inline-flex items-center gap-1.5 bg-neon-cyan/10 border border-neon-cyan/30 px-2.5 py-1 rounded text-[9px] font-mono text-neon-cyan">
+                        <i class="fas fa-shield"></i> OWASP STANDARDS
+                    </span>
+                </div>
             </div>
-    </section>
 
-
-    <br>
-    <br>
-
-
-
-
-
-
-
-   <section id="founder" class="founder-section">
-  <div class="founder-wrapper">
-
-    <!-- Founder Card -->
-    <div class="founder-card">
-      <img src="pic/Photo.jpeg" alt="Aditya Kumar Singh" class="founder-img">
-      <h3>Aditya Kumar Singh</h3>
-      <p class="founder-role">Founder & Full Stack Developer</p>
-    </div>
-
-    <!-- Founder Content -->
-    <div class="founder-content">
-      <h2>Meet the Founder</h2>
-      <p>
-        I am the Founder of <strong>Aditya ProCoders</strong>, a technology-driven IT brand
-        delivering scalable web applications, modern UI/UX solutions, and secure digital
-        systems for startups and businesses.
-      </p>
-      <p>
-        With a strong foundation in full-stack development and cybersecurity,
-        I focus on building reliable, performance-oriented products that help
-        clients achieve long-term digital growth.
-      </p>
-
-      <a href="href="mailto:adityaprocoder@gmail.com?subject=Project%20Inquiry&body=Hello%20Aditya%2C%0A%0AI%20want%20to%20discuss%20a%20project." 
-   class="btn-primary" class="btn-primary">Contact Founder</a>
-        <br>
-        <br>
-        <br>
-      <div class="founder-socials">
-        <a href="https://www.instagram.com/adityaprocoders/"><i class="fab fa-instagram"></i></a>
-        <a href="linkedin.com/in/adityaprocoder?"><i class="fab fa-linkedin"></i></a>
-        <a href="https://www.facebook.com/mradityasingh886/"><i class="fab fa-facebook"></i></a>
-        <a href="https://www.youtube.com/@adityaprocoder"><i class="fab fa-youtube"></i></a>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-
-<section class="testimonials" id="testimonials">
-  <div class="container">
-    <h2 class="section-title">What Our Clients are Saying</h2>
-    <p class="section-subtitle">
-      Hear directly from our clients about their experiences and the results we've delivered.
-    </p>
-
-    <div class="slider">
-      <div class="slider-track">
-
-        <!-- Review 1 -->
-        <div class="testimonial-card">
-          <div class="stars">★★★★★</div>
-          <p>I came with a vague idea and they turned it into a complete solution.</p>
-          <div class="client">
-            <img src="https://i.pravatar.cc/100?img=12">
-            <div>
-              <h4>Alisa Olivia</h4>
-              <span>CTO, Ritovex</span>
+            <!-- Column 2: System Quick links -->
+            <div class="md:col-span-3 space-y-4">
+                <h4 class="font-cyber font-bold text-xs uppercase tracking-wider text-neutral-300">Systems Map</h4>
+                <ul class="space-y-2 text-xs font-mono">
+                    <li><a href="#home" class="text-neutral-400 hover:text-neon-cyan transition-colors">>> Home Grid</a></li>
+                    <li><a href="#about" class="text-neutral-400 hover:text-neon-cyan transition-colors">>> Brand Story</a></li>
+                    <li><a href="#services" class="text-neutral-400 hover:text-neon-cyan transition-colors">>> Tech Matrix</a></li>
+                    <li><a href="#ai-dashboard" class="text-neutral-400 hover:text-neon-cyan transition-colors">>> AI Telemetry</a></li>
+                    <li><a href="#projects" class="text-neutral-400 hover:text-neon-cyan transition-colors">>> Deployments</a></li>
+                </ul>
             </div>
-          </div>
+
+            <!-- Column 3: Newsletter broadcast system -->
+            <div class="md:col-span-4 space-y-4">
+                <h4 class="font-cyber font-bold text-xs uppercase tracking-wider text-neutral-300">Core Telemetry Feed</h4>
+                <p class="text-neutral-400 text-xs">Subscribe to intercept periodic release updates and tech strategy newsletters.</p>
+                
+                <form id="newsletter-form" class="flex gap-2">
+                    <input type="email" id="news-email" required placeholder="name@domain.com" class="bg-[#080c1d] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-neon-cyan flex-1">
+                    <button type="submit" class="bg-gradient-to-r from-neon-blue to-neon-purple text-white px-4 rounded-xl font-cyber font-bold text-xs uppercase transition-all hover:scale-105 shadow-neon-purple">
+                        Sign
+                    </button>
+                </form>
+                <div id="newsletter-success" class="text-[10px] font-mono text-neon-green hidden">✔ Email registered to network dispatch database.</div>
+            </div>
+
         </div>
 
-        <!-- Review 2 -->
-        <div class="testimonial-card">
-          <div class="stars">★★★★★</div>
-          <p>Very responsive team. Excellent communication and delivery.</p>
-          <div class="client">
-            <img src="https://i.pravatar.cc/100?img=32">
-            <div>
-              <h4>Jordan Walk</h4>
-              <span>Software Engineer</span>
-            </div>
-          </div>
+        <!-- Copyright Row and signature block -->
+        <div class="max-w-7xl mx-auto border-t border-white/5 pt-8 mt-12 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-mono text-neutral-500">
+            <p>&copy; 2026 AdityaProCoders. All rights reserved across international grid networks.</p>
+            <p>Crafted & Maintained by <span class="text-neon-cyan">Aditya Kumar Singh</span></p>
         </div>
-
-        <!-- Review 3 -->
-        <div class="testimonial-card">
-          <div class="stars">★★★★★</div>
-          <p>Professional approach and strong technical expertise.</p>
-          <div class="client">
-            <img src="https://i.pravatar.cc/100?img=45">
-            <div>
-              <h4>Emma Stone</h4>
-              <span>Founder, Startify</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Review 4 -->
-        <div class="testimonial-card">
-          <div class="stars">★★★★★</div>
-          <p>Highly reliable IT partner. Would recommend without hesitation.</p>
-          <div class="client">
-            <img src="https://i.pravatar.cc/100?img=21">
-            <div>
-              <h4>Rahul Mehta</h4>
-              <span>Product Manager</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- duplicate for infinite scroll -->
-        <!-- copy same 4 again -->
-        <div class="testimonial-card">
-           <div class="stars">★★★★★</div>
-          <p>
-            I came with a rough idea, and the team turned it into a fully functional
-            and scalable product. Communication was excellent throughout.
-          </p>
-          <div class="client">
-            <img src="https://i.pravatar.cc/100?img=12" alt="Client">
-            <div>
-              <h4>Alisa Olivia</h4>
-              <span>CTO, Ritovex</span>
-            </div>
-          </div>
-        </div>
-        <div class="testimonial-card">
-          <div class="stars">★★★★★</div>
-          <p>
-            Working with this team was a pleasure. They were responsive,
-            detail-oriented, and delivered beyond expectations.
-          </p>
-          <div class="client">
-            <img src="https://i.pravatar.cc/100?img=32" alt="Client">
-            <div>
-              <h4>Jordan Walk</h4>
-              <span>Software Engineer, Briks</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<br>
-<br>
-
-    <footer>
-        <p>&copy; 2025 adityaprocoders</p>
-         
     </footer>
-
-    <script src="index.js"></script>
 </body>
 </html>
